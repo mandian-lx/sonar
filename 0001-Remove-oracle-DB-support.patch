@@ -1,0 +1,49 @@
+From 72e8238d4bbccc759b650b54bbe0add17b378ccd Mon Sep 17 00:00:00 2001
+From: Michael Simacek <msimacek@redhat.com>
+Date: Thu, 19 Mar 2015 17:15:52 +0100
+Subject: [PATCH 1/4] Remove oracle DB support
+
+---
+ .../java/org/sonar/core/persistence/DatabaseCommands.java    | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/sonar-core/src/test/java/org/sonar/core/persistence/DatabaseCommands.java b/sonar-core/src/test/java/org/sonar/core/persistence/DatabaseCommands.java
+index 0e9f726..6e313b7 100644
+--- a/sonar-core/src/test/java/org/sonar/core/persistence/DatabaseCommands.java
++++ b/sonar-core/src/test/java/org/sonar/core/persistence/DatabaseCommands.java
+@@ -26,7 +26,6 @@ import org.dbunit.dataset.datatype.IDataTypeFactory;
+ import org.dbunit.ext.h2.H2DataTypeFactory;
+ import org.dbunit.ext.mssql.MsSqlDataTypeFactory;
+ import org.dbunit.ext.mysql.MySqlDataTypeFactory;
+-import org.dbunit.ext.oracle.Oracle10DataTypeFactory;
+ import org.dbunit.ext.postgresql.PostgresqlDataTypeFactory;
+ import org.sonar.core.persistence.dialect.Dialect;
+ import org.sonar.core.persistence.dialect.MsSql;
+@@ -61,7 +60,6 @@ public abstract class DatabaseCommands {
+         org.sonar.core.persistence.dialect.H2.ID, H2,
+         MsSql.ID, MSSQL,
+         MySql.ID, MYSQL,
+-        Oracle.ID, ORACLE,
+         PostgreSql.ID, POSTGRESQL).get(dialect.getId());
+ 
+     return Preconditions.checkNotNull(command, "Unknown database: " + dialect);
+@@ -81,16 +79,6 @@ public abstract class DatabaseCommands {
+     }
+   };
+ 
+-  private static final DatabaseCommands ORACLE = new DatabaseCommands(new Oracle10DataTypeFactory()) {
+-    @Override
+-    List<String> resetPrimaryKey(String table, int minSequenceValue) {
+-      String sequence = StringUtils.upperCase(table) + "_SEQ";
+-      return Arrays.asList(
+-          "DROP SEQUENCE " + sequence,
+-          "CREATE SEQUENCE " + sequence + " INCREMENT BY 1 MINVALUE 1 START WITH " + minSequenceValue);
+-    }
+-  };
+-
+   private static final DatabaseCommands MSSQL = new DatabaseCommands(new MsSqlDataTypeFactory()) {
+     @Override
+     public void resetPrimaryKeys(DataSource dataSource) {
+-- 
+2.5.0
+

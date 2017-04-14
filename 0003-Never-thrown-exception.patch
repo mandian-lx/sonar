@@ -1,0 +1,36 @@
+From a67a690d1b1f79bed2c9fd8e0b257708575d7874 Mon Sep 17 00:00:00 2001
+From: Michael Simacek <msimacek@redhat.com>
+Date: Fri, 24 Oct 2014 15:55:08 +0200
+Subject: [PATCH 3/4] Never thrown exception
+
+---
+ .../java/org/sonar/wsclient/connectors/HttpClient4Connector.java     | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/sonar-ws-client/src/main/java/org/sonar/wsclient/connectors/HttpClient4Connector.java b/sonar-ws-client/src/main/java/org/sonar/wsclient/connectors/HttpClient4Connector.java
+index 40d216d..9f7feb1 100644
+--- a/sonar-ws-client/src/main/java/org/sonar/wsclient/connectors/HttpClient4Connector.java
++++ b/sonar-ws-client/src/main/java/org/sonar/wsclient/connectors/HttpClient4Connector.java
+@@ -20,7 +20,6 @@
+ package org.sonar.wsclient.connectors;
+ 
+ import java.io.IOException;
+-import java.io.UnsupportedEncodingException;
+ 
+ import org.apache.http.HttpEntity;
+ import org.apache.http.HttpException;
+@@ -172,11 +171,7 @@ public class HttpClient4Connector extends Connector {
+ 
+   private void setRequestEntity(HttpEntityEnclosingRequestBase request, AbstractQuery<?> query) {
+     if (query.getBody() != null) {
+-      try {
+         request.setEntity(new StringEntity(query.getBody(), "UTF-8"));
+-      } catch (UnsupportedEncodingException e) {
+-        throw new ConnectionException("Encoding is not supported", e);
+-      }
+     }
+   }
+ 
+-- 
+2.5.0
+

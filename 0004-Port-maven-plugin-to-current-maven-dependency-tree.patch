@@ -1,0 +1,43 @@
+From f62a0440dbd7ec25f9967580b1dab85441fe21dd Mon Sep 17 00:00:00 2001
+From: Michael Simacek <msimacek@redhat.com>
+Date: Mon, 23 Nov 2015 12:36:03 +0100
+Subject: [PATCH 4/4] Port maven-plugin to current maven-dependency-tree
+
+---
+ sonar-maven3-plugin/src/main/java/org/sonar/maven3/SonarMojo.java | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/sonar-maven3-plugin/src/main/java/org/sonar/maven3/SonarMojo.java b/sonar-maven3-plugin/src/main/java/org/sonar/maven3/SonarMojo.java
+index 15e9aa6..fa8f6d6 100644
+--- a/sonar-maven3-plugin/src/main/java/org/sonar/maven3/SonarMojo.java
++++ b/sonar-maven3-plugin/src/main/java/org/sonar/maven3/SonarMojo.java
+@@ -32,7 +32,7 @@ import org.apache.maven.plugin.MojoExecutionException;
+ import org.apache.maven.plugin.MojoFailureException;
+ import org.apache.maven.project.MavenProject;
+ import org.apache.maven.project.MavenProjectBuilder;
+-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
++import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
+ import org.sonar.api.batch.bootstrap.ProjectDefinition;
+ import org.sonar.api.batch.bootstrap.ProjectReactor;
+ import org.sonar.batch.MavenProjectConverter;
+@@ -110,7 +110,7 @@ public final class SonarMojo extends AbstractMojo {
+    * @required
+    * @readonly
+    */
+-  private DependencyTreeBuilder dependencyTreeBuilder;
++  private DependencyGraphBuilder dependencyGraphBuilder;
+ 
+   /**
+    * @component
+@@ -135,7 +135,7 @@ public final class SonarMojo extends AbstractMojo {
+       .setProjectReactor(reactor)
+       .addComponents(
+         session, getLog(), lifecycleExecutor, artifactFactory, localRepository, artifactMetadataSource, artifactCollector,
+-        dependencyTreeBuilder, projectBuilder, Maven3PluginExecutor.class)
++        dependencyGraphBuilder, projectBuilder, Maven3PluginExecutor.class)
+       .build();
+ 
+     configureLogging(batch.getLoggingConfiguration());
+-- 
+2.5.0
+
